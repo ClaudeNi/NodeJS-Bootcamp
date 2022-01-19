@@ -3,6 +3,7 @@ const express = require("express");
 const validator = require("validator");
 
 const app = express();
+app.use(express.json());
 
 mongoose.connect("mongodb://127.0.0.1:27017/products", {
     useNewUrlParser: true,
@@ -71,6 +72,13 @@ const Product = mongoose.model("Product", {
             default: new Date(),
         },
     },
+});
+
+app.post("/products/add", (req, res) => {
+    const product1 = new Product(req.body);
+    product1.save().then(() => {
+        res.status(201).send("created new product");
+    });
 });
 
 app.get("/products", (req, res) => {
